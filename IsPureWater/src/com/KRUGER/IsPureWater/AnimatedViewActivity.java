@@ -12,6 +12,7 @@ import android.widget.Button;
  * Date: 11/11/13
  * Time: 7:51 PM
  * To change this template use File | Settings | File Templates.
+ * HARRISON KURTZ
  */
 public class AnimatedViewActivity extends Activity {
 
