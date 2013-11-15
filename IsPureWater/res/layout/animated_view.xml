@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:background="#79c2ff">
+
+    <SlidingDrawer
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:content="@+id/content"
+            android:handle="@+id/handleFilter" android:id="@+id/slidingDrawer" android:layout_gravity="center">
+        <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="153dp" android:layout_gravity="center_horizontal|top"
+                    >
+                <ToggleButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New ToggleButton"
+                        android:id="@+id/toggleButton" android:layout_gravity="left|top"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Show Over Legal Limit"
+                        android:id="@+id/textView" android:layout_gravity="center_horizontal|top"
+                        android:textColor="#000000" android:textSize="20dp"/>
+                <ToggleButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New ToggleButton"
+                        android:id="@+id/toggleButton1" android:layout_gravity="left|center_vertical"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Show Over Saftey Limit"
+                        android:id="@+id/textView1" android:layout_gravity="center" android:textColor="#000000"
+                        android:textSize="20dp"/>
+                <ToggleButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New ToggleButton"
+                        android:id="@+id/toggleButton2" android:layout_gravity="left|bottom"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Show Unharmful"
+                        android:id="@+id/textView2" android:layout_gravity="center_horizontal|bottom"
+                        android:textColor="#000000" android:textSize="20dp"/>
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View"
+                        android:id="@+id/buttonOverLegal" android:layout_gravity="right|top"/>
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View"
+                        android:id="@+id/buttonOverSaftey" android:layout_gravity="right|center_vertical"/>
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View"
+                        android:id="@+id/buttonHarmless" android:layout_gravity="right|bottom"/>
+            </FrameLayout>
+        </LinearLayout>
+        <Button
+                android:id="@+id/handleFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter Options"/>
+    </SlidingDrawer>
+</LinearLayout>

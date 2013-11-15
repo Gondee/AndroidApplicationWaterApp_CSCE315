@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="29dp"
+            android:text="Select a Water System within the County"
+            android:id="@+id/textView" android:layout_gravity="left|center_vertical" android:textSize="17dp"/>
+    <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="445dp"
+            android:id="@+id/listView" android:layout_gravity="left|center_vertical"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:id="@+id/ContinueButton" android:layout_gravity="center"/>
+</LinearLayout>
