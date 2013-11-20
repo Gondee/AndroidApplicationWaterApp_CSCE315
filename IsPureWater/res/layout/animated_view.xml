@@ -9,6 +9,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:content="@+id/content"
+            android:background="#00000000"
             android:handle="@+id/handleFilter" android:id="@+id/slidingDrawer" android:layout_gravity="center">
         <LinearLayout
                 android:id="@+id/content"
@@ -74,4 +75,8 @@
                 android:layout_height="wrap_content"
                 android:text="Filter Options"/>
     </SlidingDrawer>
+    <com.KRUGER.IsPureWater.AnimatedView
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
 </LinearLayout>

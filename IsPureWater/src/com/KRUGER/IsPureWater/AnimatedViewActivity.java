@@ -2,6 +2,8 @@ package com.KRUGER.IsPureWater;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,8 @@ import android.widget.Button;
  * HARRISON KURTZ
  */
 public class AnimatedViewActivity extends Activity {
+    private SensorManager manager;
+    private Sensor accel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

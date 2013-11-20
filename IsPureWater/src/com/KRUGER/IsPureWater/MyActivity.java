@@ -11,8 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.*;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import static android.R.layout.simple_dropdown_item_1line;
@@ -135,8 +133,7 @@ public class MyActivity extends Activity {
             LoadData l = new LoadData();
             ArrayList<String> CountyCheck = l.get_county_list(getApplicationContext());
             boolean valid = false;
-                for(int i =0; i<CountyCheck.size();i++){
-
+            for(int i =0; i<CountyCheck.size();i++){
 
                    if((finalCounty.toLowerCase()).equals(CountyCheck.get(i).toLowerCase())) {
                        valid = true;
@@ -159,7 +156,7 @@ public class MyActivity extends Activity {
                 String Invalid_County = finalCounty + " : Is not a valid County in Texas!";
                 Toast toast = Toast.makeText(getApplicationContext(), Invalid_County, Toast.LENGTH_SHORT);
                 toast.show();
-                }
+            }
 
 
             }
