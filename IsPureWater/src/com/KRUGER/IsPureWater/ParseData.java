@@ -1,6 +1,5 @@
 package com.KRUGER.IsPureWater;
 
-import org.xmlpull.*;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -23,6 +22,40 @@ public class ParseData {
         factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         xpp = factory.newPullParser();
+    }
+
+    public List<String> get_systems(String county) throws XmlPullParserException, IOException
+    {
+        xpp.setInput(new BufferedReader(new FileReader("NYTimes_TexasWater.txt")));
+
+        int eventType = xpp.getEventType();
+        List<String> systems = new ArrayList<String>();
+
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if(eventType == XmlPullParser.START_TAG) {
+                if (xpp.getName()=="county_name")
+                {
+                    xpp.next();
+                    if (xpp.getText()== county)
+                    {
+                        eventType = xpp.next();
+                        while (eventType != XmlPullParser.END_TAG && xpp.getName() != "county")
+                        {
+                            if (eventType == XmlPullParser.START_TAG && xpp.getName() == "system_name")
+                            {
+                                eventType = xpp.next();
+                                systems.add(xpp.getText());
+                            }
+                            else eventType = xpp.next();
+                        }
+                        return systems;
+                    }
+                }
+                else xpp.nextTag();
+            }
+            else xpp.nextTag();
+        }
+        return systems;
     }
 
     public List<String> get_bubbles(String county, String w_system) throws XmlPullParserException, IOException {
