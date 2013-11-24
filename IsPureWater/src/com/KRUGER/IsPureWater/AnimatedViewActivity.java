@@ -6,7 +6,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static android.R.layout.simple_dropdown_item_1line;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +32,23 @@ public class AnimatedViewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animated_view);
+
+        final String county = getIntent().getExtras().getString("County");
+        final String system = getIntent().getExtras().getString("System");
+
+        ParseData forBubbles = null;
+        try {
+            forBubbles = new ParseData();
+            ArrayList<String> bubbles = forBubbles.get_bubbles(county, system, getApplicationContext());
+
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        new AnimatedView(getApplicationContext());
 
         final Bundle Send_Contaminents = new Bundle();
 
