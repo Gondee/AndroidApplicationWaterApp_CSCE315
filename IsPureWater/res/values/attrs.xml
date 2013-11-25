@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AnimatedView">
+        <attr name="county" format="string"/>
+        <attr name="system" format="string"/>
+    </declare-styleable>
+</resources>

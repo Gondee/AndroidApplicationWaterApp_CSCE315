@@ -61,6 +61,23 @@ public class ChooseWaterSystem extends Activity  {
             e.printStackTrace();
         }
 
+        // Temporary button to go to animatedviewactivity
+        Button ContinueButton = (Button) this.findViewById(R.id.ContinueButton);
+        ContinueButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent go = new Intent(ChooseWaterSystem.this, AnimatedViewActivity.class);
+                Bundle county_system_name = new Bundle();
+                county_system_name.putString("County",county);
+                county_system_name.putString("System", "test");
+                go.putExtras(county_system_name);
+                startActivity(go);
+
+            }
+        });
+
         system_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -75,6 +92,7 @@ public class ChooseWaterSystem extends Activity  {
                 go.putExtras(county_name) ;
                 startActivity(go);
             }
+
         });
 
 

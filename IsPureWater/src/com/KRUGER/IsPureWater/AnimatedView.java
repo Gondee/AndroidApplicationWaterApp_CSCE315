@@ -6,6 +6,11 @@ import android.view.View;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 
 /**
  * Created by harrison on 11/20/13.
@@ -13,6 +18,10 @@ import android.util.AttributeSet;
 public class AnimatedView extends View {
     private BoundingBox box;
     private ContaminantBubble bubble;
+
+    // County and system name
+    private String county;
+    private String system;
 
     // For touch inputs
     private float previousX;
@@ -33,6 +42,13 @@ public class AnimatedView extends View {
         createBubble();
     }
 
+    public void set_County(String c) {
+        county = c;
+    }
+
+    public void set_System(String s) {
+        system = s;
+    }
 
     private void createBubble() {
         this.setFocusableInTouchMode(true);
