@@ -83,6 +83,7 @@ public class ChooseWaterSystem extends Activity  {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Object o = system_list.getItemAtPosition(i);
                 String system = o.toString();
+                Log.w("IsPureWater", system);
 
                 Bundle county_name = new Bundle();
                 county_name.putString("County",county);

@@ -33,15 +33,8 @@ public class AnimatedViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animated_view);
 
-        AnimatedView bubbles = (AnimatedView) this.findViewById(R.id.bubbles);
-
         final String county = getIntent().getExtras().getString("County");
         final String system = getIntent().getExtras().getString("System");
-
-        bubbles.set_County(county);
-        bubbles.set_System(system);
-
-        new AnimatedView(getApplicationContext());
 
         ParseData forBubbles = null;
         try {
