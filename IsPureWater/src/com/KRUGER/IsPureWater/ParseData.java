@@ -62,6 +62,7 @@ public class ParseData {
                             }
                             else eventType = xpp.next();
                         }
+                        is.close();
                         return returnList;
                     }
                     eventType = xpp.next();
@@ -71,6 +72,7 @@ public class ParseData {
 
             else eventType = xpp.next();
         }
+        is.close();
         return returnList;
     }
 
@@ -126,6 +128,7 @@ public class ParseData {
                                         Log.d("IsPureWater", xpp.getName());
 
                                     }
+                                    is.close();
                                     return returnList;
                                 }
                                 else eventType = xpp.next();
@@ -139,6 +142,7 @@ public class ParseData {
             }
             else eventType = xpp.next();
         }
+        is.close();
         return returnList;
     }
 
