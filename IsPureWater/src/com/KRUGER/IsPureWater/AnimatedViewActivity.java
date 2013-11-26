@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.ToggleButton;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -32,6 +33,7 @@ public class AnimatedViewActivity extends Activity {
     private Sensor accel;
     private ArrayList<Contaminant> contaminants;
     private AnimatedView bubbles;
+    RelativeLayout container;
 
 
     @Override
@@ -39,7 +41,7 @@ public class AnimatedViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animated_view);
 
-        RelativeLayout container = (RelativeLayout) findViewById(R.id.animatedLayout);
+        container = (RelativeLayout) findViewById(R.id.animatedLayout);
 
         // Create AnimatedView
         bubbles = new AnimatedView(this);
@@ -64,11 +66,14 @@ public class AnimatedViewActivity extends Activity {
         Log.d("CONTAMINANTLIST", Integer.toString(contaminants.size()));
 
         bubbles.setContaminantBubbles(contaminants);
-        container.addView(bubbles);
+        container.addView(bubbles, 0);
 
         Button OverLegalButton= (Button) this.findViewById(R.id.buttonOverLegal);
         Button OverSafteyButton = (Button) this.findViewById(R.id.buttonOverSaftey);
         Button HarmlessButton = (Button) this.findViewById(R.id.buttonHarmless);
+        ToggleButton OverLegalToggle = (ToggleButton) this.findViewById(R.id.toggleOverLegal);
+        ToggleButton OverHealthToggle = (ToggleButton) this.findViewById(R.id.toggleOverHealth);
+        ToggleButton UnharmfulToggle = (ToggleButton) this.findViewById(R.id.toggleUnharmful);
 
         OverLegalButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +84,7 @@ public class AnimatedViewActivity extends Activity {
                         overLegalContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtra("Contaminents",overLegalContaminants);
+                go.putExtra("Contaminents", overLegalContaminants);
                 startActivity(go);
             }
         });
@@ -93,7 +98,7 @@ public class AnimatedViewActivity extends Activity {
                         overHealthContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtra("Contaminents",overHealthContaminants);
+                go.putExtra("Contaminents", overHealthContaminants);
                 startActivity(go);
             }
         });
@@ -107,8 +112,22 @@ public class AnimatedViewActivity extends Activity {
                         unharmfulContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtra("Contaminents",unharmfulContaminants);
+                go.putExtra("Contaminents", unharmfulContaminants);
                 startActivity(go);
+            }
+        });
+
+        OverLegalToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Contaminant> overLegalContaminants = new ArrayList<Contaminant>();
+                for(Contaminant c : contaminants)
+                    if(c.isOverLegalLimit)
+                        overLegalContaminants.add(c);
+
+                container.removeView(bubbles);
+                bubbles.setContaminantBubbles(overLegalContaminants);
+                container.addView(bubbles, 0);
             }
         });
 

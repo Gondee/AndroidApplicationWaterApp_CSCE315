@@ -32,4 +32,29 @@ public class Contaminant {
         else
             return false;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public String getAverage(){
+        return average;
+    }
+
+    public String getMax() {
+        return max;
+    }
+
+    public String getHealth_Limit() {
+        return health_limit;
+    }
+
+    public String getLegal_Limit() {
+        return legal_limit;
+    }
+
 }

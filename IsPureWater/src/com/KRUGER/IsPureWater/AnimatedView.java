@@ -70,7 +70,6 @@ public class AnimatedView extends View {
     protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
         width = xNew;
         height = yNew;
-        Log.d("WIDTHHEIGHT", width+"."+height);
         int i = 0;
         for(ContaminantBubble c : bubbles) {
             bubbles.get(i).setCenter(bubbles.size(), i, width, height);
