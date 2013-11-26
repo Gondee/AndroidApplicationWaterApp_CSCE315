@@ -61,6 +61,8 @@ public class AnimatedView extends View {
             else
                 color = Color.GREEN;
             bubbles.add(new ContaminantBubble(c, color));
+            bubbles.get(i).setCenter(bubbles.size(), i, width, height);
+
             i++;
         }
         invalidate();

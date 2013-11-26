@@ -16,6 +16,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static android.R.layout.simple_dropdown_item_1line;
 
@@ -32,6 +33,7 @@ public class AnimatedViewActivity extends Activity {
     private SensorManager manager;
     private Sensor accel;
     private ArrayList<Contaminant> contaminants;
+    private ArrayList<Contaminant> contaminants_shown;
     private AnimatedView bubbles;
     RelativeLayout container;
 
@@ -62,18 +64,16 @@ public class AnimatedViewActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Log.d("CONTAMINANTLIST", Integer.toString(contaminants.size()));
-
+        contaminants_shown = contaminants;
         bubbles.setContaminantBubbles(contaminants);
         container.addView(bubbles, 0);
 
-        Button OverLegalButton= (Button) this.findViewById(R.id.buttonOverLegal);
-        Button OverSafteyButton = (Button) this.findViewById(R.id.buttonOverSaftey);
-        Button HarmlessButton = (Button) this.findViewById(R.id.buttonHarmless);
-        ToggleButton OverLegalToggle = (ToggleButton) this.findViewById(R.id.toggleOverLegal);
-        ToggleButton OverHealthToggle = (ToggleButton) this.findViewById(R.id.toggleOverHealth);
-        ToggleButton UnharmfulToggle = (ToggleButton) this.findViewById(R.id.toggleUnharmful);
+        final Button OverLegalButton= (Button) this.findViewById(R.id.buttonOverLegal);
+        final Button OverSafteyButton = (Button) this.findViewById(R.id.buttonOverSaftey);
+        final Button HarmlessButton = (Button) this.findViewById(R.id.buttonHarmless);
+        final ToggleButton OverLegalToggle = (ToggleButton) this.findViewById(R.id.toggleOverLegal);
+        final ToggleButton OverHealthToggle = (ToggleButton) this.findViewById(R.id.toggleOverHealth);
+        final ToggleButton UnharmfulToggle = (ToggleButton) this.findViewById(R.id.toggleUnharmful);
 
         OverLegalButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,17 +120,79 @@ public class AnimatedViewActivity extends Activity {
         OverLegalToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Contaminant> overLegalContaminants = new ArrayList<Contaminant>();
-                for(Contaminant c : contaminants)
-                    if(c.isOverLegalLimit)
-                        overLegalContaminants.add(c);
+                if (OverLegalToggle.isChecked()) {
+                    for (Contaminant c : contaminants_shown)
+                        if (c.isOverLegalLimit)
+                            contaminants_shown.add(c);
 
-                container.removeView(bubbles);
-                bubbles.setContaminantBubbles(overLegalContaminants);
-                container.addView(bubbles, 0);
+                    container.removeView(bubbles);
+                    bubbles.setContaminantBubbles(contaminants_shown);
+                    container.addView(bubbles, 0);
+                } else {
+                    Iterator<Contaminant> iter = contaminants_shown.iterator();
+                    while(iter.hasNext()) {
+                        if(iter.next().isOverLegalLimit)
+                            iter.remove();
+                    }
+
+                    container.removeView(bubbles);
+                    bubbles.setContaminantBubbles(contaminants_shown);
+                    container.addView(bubbles, 0);
+                }
             }
         });
 
+        OverHealthToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(OverHealthToggle.isChecked()) {
+                    for(Contaminant c : contaminants_shown)
+                        if(c.isOverHealthLimit)
+                            contaminants_shown.add(c);
+
+                    container.removeView(bubbles);
+                    bubbles.setContaminantBubbles(contaminants_shown);
+                    container.addView(bubbles, 0);
+                }
+                else {
+                    Iterator<Contaminant> iter = contaminants_shown.iterator();
+                    while(iter.hasNext()) {
+                        if(iter.next().isOverHealthLimit)
+                            iter.remove();
+                    }
+
+                    container.removeView(bubbles);
+                    bubbles.setContaminantBubbles(contaminants_shown);
+                    container.addView(bubbles, 0);
+                }
+            }
+        });
+
+        UnharmfulToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(UnharmfulToggle.isChecked()) {
+                    for(Contaminant c : contaminants_shown)
+                        if(!c.isOverLegalLimit && !c.isOverHealthLimit)
+                            contaminants_shown.add(c);
+
+                    container.removeView(bubbles);
+                    bubbles.setContaminantBubbles(contaminants_shown);
+                    container.addView(bubbles, 0);
+                }
+                else {
+                    Iterator<Contaminant> iter = contaminants_shown.iterator();
+                    while(iter.hasNext()) {
+                        if(!iter.next().isOverHealthLimit && !iter.next().isOverLegalLimit)
+                            iter.remove();
+                    }
+
+                    container.removeView(bubbles);
+                    bubbles.setContaminantBubbles(contaminants_shown);
+                    container.addView(bubbles, 0);
+                }
+            }
+        });
 
     }
 
