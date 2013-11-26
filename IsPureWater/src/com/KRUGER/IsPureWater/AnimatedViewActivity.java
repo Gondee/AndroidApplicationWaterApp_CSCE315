@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -24,28 +26,44 @@ import static android.R.layout.simple_dropdown_item_1line;
  * To change this template use File | Settings | File Templates.
  * HARRISON KURTZ
  */
+
 public class AnimatedViewActivity extends Activity {
     private SensorManager manager;
     private Sensor accel;
+    AnimatedView bubbles;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animated_view);
 
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.animatedLayout);
+
+        // Create AnimatedView
+        bubbles = new AnimatedView(this);
+        bubbles.setLayoutParams(new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.MATCH_PARENT));
+
         final String county = getIntent().getExtras().getString("County");
         final String system = getIntent().getExtras().getString("System");
 
         ParseData forBubbles = null;
+        ArrayList<Contaminant> contaminants = new ArrayList<Contaminant>();
         try {
             forBubbles = new ParseData();
-            ArrayList<String> bubble_info = forBubbles.get_bubbles(county, system, getApplicationContext());
+            contaminants = forBubbles.get_contaminants(county, system, getApplicationContext());
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        Log.d("CONTAMINANTLIST", Integer.toString(contaminants.size()));
+
+        bubbles.setContaminantBubbles(contaminants);
+
+        container.addView(bubbles);
 
         final Bundle Send_Contaminents = new Bundle();
 

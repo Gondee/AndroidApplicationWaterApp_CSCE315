@@ -26,6 +26,7 @@ public class ParseData {
     private XmlPullParserFactory factory;
     XmlPullParser xpp;
     ArrayList<String> returnList = new ArrayList<String>();
+    ArrayList<Contaminant> contaminantList = new ArrayList<Contaminant>();
 
     
     public ParseData() throws XmlPullParserException {
@@ -76,7 +77,7 @@ public class ParseData {
         return returnList;
     }
 
-    public ArrayList<String> get_bubbles(String county, String w_system, Context t) throws XmlPullParserException, IOException {
+    public ArrayList<Contaminant> get_contaminants(String county, String w_system, Context t) throws XmlPullParserException, IOException {
 
 
         AssetManager am = t.getAssets();
@@ -106,21 +107,22 @@ public class ParseData {
                                     while (eventType != XmlPullParser.END_TAG || !xpp.getName().equals("water_system"))
                                     {
                                         String line = new String();
+                                        ArrayList<String> tempContaminant = new ArrayList<String>();
 
                                         while (eventType != XmlPullParser.END_TAG || !xpp.getName().equals("contaminant"))
                                         {
-
                                             if (eventType == XmlPullParser.TEXT ){
-                                                if (xpp.getText().indexOf("\t") == -1 && xpp.getText().indexOf("\n") == -1)
+                                                if (xpp.getText().indexOf("\t") == -1 && xpp.getText().indexOf("\n") == -1) {
                                                     line = line + xpp.getText() + "&";
-
+                                                    tempContaminant.add(xpp.getText());
+                                                }
                                             }
 
                                             eventType = xpp.next();
                                         }
 
                                         Log.d("IsPureWater", "line: " + line);
-                                        returnList.add(line);
+                                        contaminantList.add(new Contaminant(tempContaminant.get(0), tempContaminant.get(1), tempContaminant.get(2), tempContaminant.get(3), tempContaminant.get(4)));
                                         Log.d("IsPureWater", xpp.getName());
                                         eventType = xpp.next();
                                         while (eventType != XmlPullParser.START_TAG && eventType != XmlPullParser.END_TAG)
@@ -129,7 +131,7 @@ public class ParseData {
 
                                     }
                                     is.close();
-                                    return returnList;
+                                    return contaminantList;
                                 }
                                 else eventType = xpp.next();
                             }
@@ -143,7 +145,7 @@ public class ParseData {
             else eventType = xpp.next();
         }
         is.close();
-        return returnList;
+        return contaminantList;
     }
 
 

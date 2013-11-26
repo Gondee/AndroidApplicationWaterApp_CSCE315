@@ -1,5 +1,7 @@
 package com.KRUGER.IsPureWater;
 
+import android.util.Log;
+
 /**
  * Created by harrison on 11/25/13.
  */
@@ -10,18 +12,18 @@ public class Contaminant {
     private String max;
     private String health_limit;
     private String legal_limit;
-    private Boolean isOverHealthLimit;
-    private Boolean isOverLegalLimit;
+    public Boolean isOverHealthLimit;
+    public Boolean isOverLegalLimit;
 
     Contaminant(String n, String a, String m, String hl, String ll) {
         name = n;
-        units = a.replaceAll("[0-9]","");
-        average = a.replaceAll("\\D+","");
+        units = a.replaceAll("[\\d+\\.?\\d*]","");
+        average = a.replaceAll("[^\\d+\\.?\\d*\\s+]","");
         max = m;
         health_limit = (noValue(hl)) ? "No health limit" : hl;
-        legal_limit = (noValue(ll)) ? "No legal limit" : hl;
-        isOverHealthLimit = (noValue(hl)) ? false : (Integer.parseInt(max) > Integer.parseInt(health_limit));
-        isOverLegalLimit = (noValue(ll)) ? false : (Integer.parseInt(max) > Integer.parseInt(legal_limit));
+        legal_limit = (noValue(ll)) ? "No legal limit" : ll;
+        isOverHealthLimit = (noValue(hl)) ? false : (Double.parseDouble(max) > Double.parseDouble(health_limit));
+        isOverLegalLimit = (noValue(ll)) ? false : (Double.parseDouble(max) > Double.parseDouble(legal_limit));
     }
 
     private Boolean noValue(String v) {

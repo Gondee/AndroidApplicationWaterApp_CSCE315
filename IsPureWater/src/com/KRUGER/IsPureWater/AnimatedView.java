@@ -2,6 +2,9 @@ package com.KRUGER.IsPureWater;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -17,11 +20,11 @@ import java.util.ArrayList;
  */
 public class AnimatedView extends View {
     private BoundingBox box;
-    private ContaminantBubble bubble;
+    private ArrayList<ContaminantBubble> bubbles = new ArrayList<ContaminantBubble>();
 
-    // County and system name
-    private String county;
-    private String system;
+    // Height and width of layout
+    private int width;
+    private int height;
 
     // For touch inputs
     private float previousX;
@@ -29,31 +32,51 @@ public class AnimatedView extends View {
 
     public AnimatedView(Context context) {
         super(context);
-        createBubble();
+        createBox();
     }
 
     public AnimatedView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        createBubble();
+        createBox();
     }
 
     public AnimatedView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        createBubble();
+        createBox();
     }
 
-    public void set_County(String c) {
-        county = c;
-    }
-
-    public void set_System(String s) {
-        system = s;
-    }
-
-    private void createBubble() {
-        this.setFocusableInTouchMode(true);
+    private void createBox() {
         box = new BoundingBox(Color.TRANSPARENT);
-        bubble = new ContaminantBubble(Color.RED);
+    }
+
+    public void setContaminantBubbles(ArrayList<Contaminant> cl) {
+        bubbles.clear();
+        int color;
+        int i = 0;
+        for(Contaminant c : cl) {
+            if(c.isOverLegalLimit)
+                color = Color.RED;
+            else if(c.isOverHealthLimit)
+                color = Color.YELLOW;
+            else
+                color = Color.GREEN;
+            bubbles.add(new ContaminantBubble(c, color));
+            i++;
+        }
+        invalidate();
+    }
+
+    @Override
+    protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
+        width = xNew;
+        height = yNew;
+        Log.d("WIDTHHEIGHT", width+"."+height);
+        int i = 0;
+        for(ContaminantBubble c : bubbles) {
+            bubbles.get(i).setCenter(bubbles.size(), i, width, height);
+            i++;
+        }
+        box.set(0, 0, width, height);
     }
 
     @Override
@@ -61,10 +84,15 @@ public class AnimatedView extends View {
         // Draw the components
         super.onDraw(canvas);
         box.draw(canvas);
-        bubble.draw(canvas);
 
-        // Update position of the bubble
-        bubble.moveWithCollisionDetection(box);
+        if(!bubbles.isEmpty()) {
+            for(ContaminantBubble b : bubbles) {
+                b.draw(canvas);
+
+                // Update position of the bubble
+                b.moveWithCollisionDetection(box);
+            }
+        }
 
         // Delay
         try {
