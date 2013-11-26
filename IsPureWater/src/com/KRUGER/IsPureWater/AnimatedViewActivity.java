@@ -30,7 +30,9 @@ import static android.R.layout.simple_dropdown_item_1line;
 public class AnimatedViewActivity extends Activity {
     private SensorManager manager;
     private Sensor accel;
-    AnimatedView bubbles;
+    private ArrayList<Contaminant> contaminants;
+    private AnimatedView bubbles;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,14 +44,14 @@ public class AnimatedViewActivity extends Activity {
         // Create AnimatedView
         bubbles = new AnimatedView(this);
         bubbles.setLayoutParams(new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT,
-                        RelativeLayout.LayoutParams.MATCH_PARENT));
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT));
 
         final String county = getIntent().getExtras().getString("County");
         final String system = getIntent().getExtras().getString("System");
 
         ParseData forBubbles = null;
-        ArrayList<Contaminant> contaminants = new ArrayList<Contaminant>();
+        contaminants = new ArrayList<Contaminant>();
         try {
             forBubbles = new ParseData();
             contaminants = forBubbles.get_contaminants(county, system, getApplicationContext());
@@ -62,54 +64,51 @@ public class AnimatedViewActivity extends Activity {
         Log.d("CONTAMINANTLIST", Integer.toString(contaminants.size()));
 
         bubbles.setContaminantBubbles(contaminants);
-
         container.addView(bubbles);
-
-        final Bundle Send_Contaminents = new Bundle();
 
         Button OverLegalButton= (Button) this.findViewById(R.id.buttonOverLegal);
         Button OverSafteyButton = (Button) this.findViewById(R.id.buttonOverSaftey);
         Button HarmlessButton = (Button) this.findViewById(R.id.buttonHarmless);
 
         OverLegalButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                Send_Contaminents.putString("ContaminentIndex","example");
+                ArrayList<Contaminant> overLegalContaminants = new ArrayList<Contaminant>();
+                for(Contaminant c : contaminants)
+                    if(c.isOverLegalLimit)
+                        overLegalContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtras(Send_Contaminents) ;
+                go.putExtra("Contaminents",overLegalContaminants);
                 startActivity(go);
-
             }
         });
 
         OverSafteyButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                Send_Contaminents.putString("ContaminentIndex","example");
+                ArrayList<Contaminant> overHealthContaminants = new ArrayList<Contaminant>();
+                for(Contaminant c : contaminants)
+                    if(c.isOverHealthLimit)
+                        overHealthContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtras(Send_Contaminents) ;
+                go.putExtra("Contaminents",overHealthContaminants);
                 startActivity(go);
-
             }
         });
 
         HarmlessButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                Send_Contaminents.putString("ContaminentIndex","example");
+                ArrayList<Contaminant> unharmfulContaminants = new ArrayList<Contaminant>();
+                for(Contaminant c : contaminants)
+                    if(!c.isOverLegalLimit && !c.isOverHealthLimit)
+                        unharmfulContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtras(Send_Contaminents) ;
+                go.putExtra("Contaminents",unharmfulContaminants);
                 startActivity(go);
-
             }
         });
 

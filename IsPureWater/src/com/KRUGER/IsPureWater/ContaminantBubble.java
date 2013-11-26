@@ -26,6 +26,10 @@ public class ContaminantBubble {
         paint.setColor(color);
     }
 
+    public RectF getBounds() {
+        return bounds;
+    }
+
     public void setCenter(int numBubbles, int index, int width, int height) {
         int column = index%4;
         int column_tab = (width-160)/4; // Used 160 to leave 20 between edge of bubble and screen
