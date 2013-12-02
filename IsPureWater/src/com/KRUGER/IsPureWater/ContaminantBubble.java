@@ -132,7 +132,7 @@ public class ContaminantBubble {
         float tempY = b.getY()+b.getSpeedY();
         float tempRadius = b.getRadius();
         float distance = ((x+speedX - tempX) * (x+speedX - tempX) + (y+speedY - tempY) * (y+speedY - tempY));
-        if(radius*b.getRadius()*4 >= distance)
+        if(radius*b.getRadius()*4+25 >= distance)
             return true;
         else
             return false;
@@ -187,10 +187,13 @@ public class ContaminantBubble {
         b.setSpeedY(vy2);
         */
 
-        speedX = b.getSpeed()*(float)Math.cos(Math.toRadians(b.getMoveAngle()));
-        speedY = b.getSpeed()*(float)Math.sin(Math.toRadians(b.getMoveAngle()));
-        b.setSpeedX((float)(getSpeed()*Math.cos(Math.toRadians(getMoveAngle()))));
-        b.setSpeedY((float)(getSpeed()*Math.sin(Math.toRadians(getMoveAngle()))));
+        float angle = getMoveAngle();
+        float otherAngle = b.getMoveAngle();
+
+        speedX = b.getSpeed()*(float)Math.cos(Math.toRadians(otherAngle));
+        speedY = b.getSpeed()*(float)Math.sin(Math.toRadians(otherAngle));
+        b.setSpeedX((float)(getSpeed()*Math.cos(Math.toRadians(angle))));
+        b.setSpeedY((float)(getSpeed()*Math.sin(Math.toRadians(angle))));
 
 
 
