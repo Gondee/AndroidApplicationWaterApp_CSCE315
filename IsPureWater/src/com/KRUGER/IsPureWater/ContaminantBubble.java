@@ -3,6 +3,7 @@ package com.KRUGER.IsPureWater;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Matrix;
@@ -18,7 +19,7 @@ public class ContaminantBubble {
     private Contaminant contaminant; // Contaminant information
     private float radius = 60; // Radius
     private float x, y; // Center (x,y)
-    private float speedX, speedY = 2f; // Speed (x,y)
+    private float speedX, speedY; // Speed (x,y)
     private RectF bounds = new RectF();
     private Bitmap bubbleBitMap;
 
@@ -91,24 +92,24 @@ public class ContaminantBubble {
                 y = 0;
         }
 
-        this.speedX = (float)(1 * Math.cos(Math.toRadians(angleInDegree)));
-        this.speedY = (float)(1 * Math.sin(Math.toRadians(angleInDegree)));
+        this.speedX = (float)(2 * Math.cos(Math.toRadians(angleInDegree)));
+        this.speedY = (float)(2 * Math.sin(Math.toRadians(angleInDegree)));
 
-        Log.d("X"+index, String.valueOf(x));
+        Log.d("X" + index, String.valueOf(x));
         Log.d("Y"+index, String.valueOf(y));
 
     }
 
     public void moveWithCollisionDetection(BoundingBox box) {
         // Get new (x,y) position
-        if(speedX < 3)
+        if(speedX < 4)
             x += speedX;
         else
-            speedX = 3;
-        if(speedY < 3)
+            speedX = 4;
+        if(speedY < 4)
             y += speedY;
         else
-            speedY = 3;
+            speedY = 4;
         // Detect collision and react
         if (x + radius > box.xMax) {
             speedX = -speedX;
@@ -192,7 +193,7 @@ public class ContaminantBubble {
 
         speedX = b.getSpeed()*(float)Math.cos(Math.toRadians(otherAngle));
         speedY = b.getSpeed()*(float)Math.sin(Math.toRadians(otherAngle));
-        b.setSpeedX((float)(getSpeed()*Math.cos(Math.toRadians(angle))));
+        b.setSpeedX((float) (getSpeed() * Math.cos(Math.toRadians(angle))));
         b.setSpeedY((float)(getSpeed()*Math.sin(Math.toRadians(angle))));
 
 
@@ -200,11 +201,21 @@ public class ContaminantBubble {
     }
     public void draw(Canvas canvas) {
         bounds.set(x-radius, y-radius, x+radius, y+radius);
+        // set paint for bitmap
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setFilterBitmap(true);
         paint.setDither(true);
         canvas.drawBitmap(bubbleBitMap, null, bounds, paint);
+        // set paint for text
+        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // text color - #3D3D3D
+        paint.setColor(Color.rgb(61, 61, 61));
+        // text size in pixels
+        paint.setTextSize((int) (12));
+        // text shadow
+        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+        canvas.drawText(contaminant.getName(), x-textPaint.getTextSize(), y, textPaint);
     }
 }
 
