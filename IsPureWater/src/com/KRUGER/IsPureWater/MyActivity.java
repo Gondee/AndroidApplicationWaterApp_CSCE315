@@ -65,8 +65,6 @@ public class MyActivity extends Activity {
 
                 }
 
-
-
                 if (match) {
                     Toast toast = Toast.makeText(getApplicationContext(), "County: "+ Clicked_County, Toast.LENGTH_SHORT);
                     toast.show();
