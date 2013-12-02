@@ -30,10 +30,7 @@ public class Contaminant implements Serializable {
     }
 
     private Boolean noValue(String v) {
-        if(v.equals("-"))
-            return true;
-        else
-            return false;
+        return v.equals("-") ? true : false;
     }
 
     public String getName() {

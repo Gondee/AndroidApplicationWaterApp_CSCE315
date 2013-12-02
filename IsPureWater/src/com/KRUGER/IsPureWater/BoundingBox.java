@@ -2,23 +2,27 @@ package com.KRUGER.IsPureWater;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.RectF;
 
 /**
  * Created by harrison on 11/20/13.
  */
 public class BoundingBox {
-    int xMin, xMax, yMin, yMax;
+    float xMin, xMax, yMin, yMax;
     private Paint paint;  // paint style and color
-    private Rect bounds;
+    private RectF bounds;
 
     public BoundingBox(int color) {
         paint = new Paint();
         paint.setColor(color);
-        bounds = new Rect();
+        bounds = new RectF();
     }
 
-    public void set(int x, int y, int width, int height) {
+    public RectF getBounds() {
+        return bounds;
+    }
+
+    public void set(float x, int y,float width, float height) {
         xMin = x;
         xMax = x + width - 1;
         yMin = y;

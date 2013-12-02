@@ -1,9 +1,15 @@
 package com.KRUGER.IsPureWater;
 
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by harrison on 11/20/13. 192
@@ -11,29 +17,52 @@ import android.util.Log;
 public class ContaminantBubble {
     private Contaminant contaminant; // Contaminant information
     private float radius = 60; // Radius
-    private float x = 80; // Center (x,y)
-    private float y = 80;
-    private float speedX = 5f; // Speed (x,y)
-    private float speedY = 5f;
-    private RectF bounds;
-    private Paint paint;
+    private float x, y; // Center (x,y)
+    private float speedX, speedY = 1f; // Speed (x,y)
+    private RectF bounds = new RectF();
+    private Bitmap bubbleBitMap;
 
     // Constructor
-    public ContaminantBubble(Contaminant c, int color) {
+    public ContaminantBubble(Contaminant c, Bitmap b, int num, int width, int height, int angleInDegrees) {
         contaminant = c;
-        bounds = new RectF();
-        paint = new Paint();
-        paint.setColor(color);
+        x = 0;
+        y = 0;
+        bubbleBitMap = b;
+        setBubble(num, width, height, angleInDegrees);
     }
 
-    public RectF getBounds() {
-        return bounds;
+    public float getX() {
+        return x;
     }
 
-    public void setCenter(int numBubbles, int index, int width, int height) {
+    public float getY() {
+        return y;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public float getSpeedX() {
+        return speedX;
+    }
+
+    public float getSpeedY() {
+        return speedY;
+    }
+
+    public void setSpeedX(float vx) {
+        speedX = vx;
+    }
+
+    public void setSpeedY(float vy) {
+        speedY = vy;
+    }
+
+    public void setBubble(int index, int width, int height, int angleInDegree) {
         int column = index%4;
-        int column_tab = (width-160)/4; // Used 160 to leave 20 between edge of bubble and screen
-        x += (column*column_tab);
+        int column_tab = (width-160)/4; // Used 160 to leave 20 gap between the bubbles bounds and bounding box
+        x += column_tab+(column*column_tab);
 
         int row_tab = (height-160)/4;
 
@@ -61,6 +90,13 @@ public class ContaminantBubble {
             default:
                 y = 0;
         }
+
+        this.speedX = (float)(1 * Math.cos(Math.toRadians(angleInDegree)));
+        this.speedY = (float)(1 * Math.sin(Math.toRadians(angleInDegree)));
+
+        Log.d("X"+index, String.valueOf(x));
+        Log.d("Y"+index, String.valueOf(y));
+
     }
 
     public void moveWithCollisionDetection(BoundingBox box) {
@@ -84,9 +120,72 @@ public class ContaminantBubble {
         }
     }
 
+    // collision with bubbles
+    public boolean bubbleCollisionDetection(ContaminantBubble b) {
+        float tempX = b.getX();
+        float tempY = b.getY();
+        float tempRadius = b.getRadius();
+        float distance = (float)(Math.sqrt((x - tempX) * (x - tempX) + (y - tempY) * (y - tempY)));
+        if(radius >= distance)
+            return true;
+        else
+            return false;
+    }
+
+    // Magnitude of speed
+    public float getSpeed() {
+        return (float)Math.sqrt(speedX * speedX + speedY * speedY);
+    }
+
+    // Angle
+    public float getMoveAngle() {
+        return (float)Math.toDegrees(Math.atan2(-speedY, speedX));
+    }
+
+    public void bubbleCollisionHandler(ContaminantBubble b) {
+        float dx = x - b.getX();
+        float dy = y - b.getY();
+        float d = (float)Math.sqrt(dx*dx + dy*dy);
+        float vp1, vp2, vx1, vx2, vy1, vy2;
+        vx1 = speedX;
+        vx2 = b.getSpeedX();
+        vy1 = speedY;
+        vy2 = b.getSpeedY();
+        vp1 = vx1*dx/d + vy1*dy/d;
+        vp2 = vx2*dx/d + vy2*dy/d;
+
+        // Unit vector in direction of collision
+        float ax = dx/d;
+        float ay = dy/d;
+
+        // Projection of velocities
+        float va1 = vx1*ax +vy1*ay;
+        float vb1 = -vx1*ay + vy1*ax;
+        float va2 = vx2*ax + vy2*ay;
+        float vb2 = -vx2 + vy2*ax;
+
+        // New velocities
+        float vaP1 = va1 + (va1-va2);
+        float vaP2 = va2 + (va1-va2);
+
+        // Undo projections
+        vx1 = vaP1*ax - vb1*ay;
+        vy1 = vaP1*ay + vb1*ax;
+        vx2 = vaP2*ax - vb2*ay;
+        vy2 = vaP2*ay + vb2*ax;
+
+        speedX = vx1;
+        speedY = vy1;
+        b.setSpeedX(vx2);
+        b.setSpeedY(vy2);
+    }
     public void draw(Canvas canvas) {
         bounds.set(x-radius, y-radius, x+radius, y+radius);
-        canvas.drawOval(bounds, paint);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+        canvas.drawBitmap(bubbleBitMap, null, bounds, paint);
     }
 }
 
