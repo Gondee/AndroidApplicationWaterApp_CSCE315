@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ExpandedGroupBackground">#FF7C7C7C</color>
+    <color name="Black">#000000</color>
+    <color name="ExpandedChildBackground">#FFAFABAB</color>
+</resources>

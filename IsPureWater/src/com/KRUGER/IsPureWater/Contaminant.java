@@ -1,11 +1,14 @@
 package com.KRUGER.IsPureWater;
 
+import android.os.Parcelable;
 import android.util.Log;
+
+import java.io.Serializable;
 
 /**
  * Created by harrison on 11/25/13.
  */
-public class Contaminant {
+public class Contaminant implements Serializable {
     private String name;
     private String units;
     private String average;

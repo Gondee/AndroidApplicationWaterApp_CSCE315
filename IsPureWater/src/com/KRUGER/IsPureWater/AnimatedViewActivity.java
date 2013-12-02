@@ -7,10 +7,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.ToggleButton;
+import android.widget.*;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -84,8 +81,17 @@ public class AnimatedViewActivity extends Activity {
                         overLegalContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtra("Contaminents", overLegalContaminants);
-                startActivity(go);
+                Bundle info = new Bundle();
+                info.putSerializable("contaminants", overLegalContaminants);
+                go.putExtras(info);
+
+                if(overLegalContaminants.size()==0){
+                    Toast toast = Toast.makeText(getApplicationContext(), "No Contaminants to show", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else{
+                    startActivity(go);
+                }
             }
         });
 
@@ -98,8 +104,18 @@ public class AnimatedViewActivity extends Activity {
                         overHealthContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtra("Contaminents", overHealthContaminants);
-                startActivity(go);
+                Bundle info = new Bundle();
+                info.putSerializable("contaminants", overHealthContaminants);
+                go.putExtras(info);
+
+                if(overHealthContaminants.size()==0){
+                    Toast toast = Toast.makeText(getApplicationContext(), "No Contaminants to show", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                 else{
+                    startActivity(go);
+                 }
+
             }
         });
 
@@ -112,8 +128,17 @@ public class AnimatedViewActivity extends Activity {
                         unharmfulContaminants.add(c);
 
                 Intent go = new Intent(AnimatedViewActivity.this, ContaminentInfo.class);
-                go.putExtra("Contaminents", unharmfulContaminants);
-                startActivity(go);
+                Bundle info = new Bundle();
+                info.putSerializable("contaminants", unharmfulContaminants);
+                go.putExtras(info);
+
+                if(unharmfulContaminants.size()==0){
+                    Toast toast = Toast.makeText(getApplicationContext(), "No Contaminants to show", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else{
+                    startActivity(go);
+                }
             }
         });
 
