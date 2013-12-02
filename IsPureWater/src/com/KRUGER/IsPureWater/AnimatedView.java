@@ -20,6 +20,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 
@@ -77,15 +78,14 @@ public class AnimatedView extends View {
         try {
             open = manager.open(color+"Bubble.png");
             Bitmap originalBitmap = BitmapFactory.decodeStream(open);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, 120, 120, false);
-            return scaledBitmap;
+            return originalBitmap;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void setContaminantBubbles(ArrayList<Contaminant> cl) {
+    public void setContaminantBubbles(Collection<Contaminant> cl) {
         bubbles.clear();
         String color;
         int i = 0;
@@ -110,6 +110,7 @@ public class AnimatedView extends View {
         width = xNew;
         height = yNew;
         Random rand = new Random();
+        Log.d("WIDTH HEIGHT", width+" "+height);
         box.set(0, 0, width, height);
     }
 

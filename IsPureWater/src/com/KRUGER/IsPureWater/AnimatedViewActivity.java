@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import static android.R.layout.simple_dropdown_item_1line;
 
@@ -30,7 +31,7 @@ public class AnimatedViewActivity extends Activity {
     private SensorManager manager;
     private Sensor accel;
     private ArrayList<Contaminant> contaminants;
-    private ArrayList<Contaminant> contaminants_shown;
+    private LinkedList<Contaminant> contaminants_shown;
     private AnimatedView bubbles;
     RelativeLayout container;
 
@@ -61,8 +62,8 @@ public class AnimatedViewActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        contaminants_shown = contaminants;
         bubbles.setContaminantBubbles(contaminants);
+        contaminants_shown = new LinkedList<Contaminant>(contaminants);
         container.addView(bubbles, 0);
 
         final Button OverLegalButton= (Button) this.findViewById(R.id.buttonOverLegal);
@@ -146,7 +147,7 @@ public class AnimatedViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (OverLegalToggle.isChecked()) {
-                    for (Contaminant c : contaminants_shown)
+                    for (Contaminant c : contaminants)
                         if (c.isOverLegalLimit)
                             contaminants_shown.add(c);
 
@@ -156,7 +157,8 @@ public class AnimatedViewActivity extends Activity {
                 } else {
                     Iterator<Contaminant> iter = contaminants_shown.iterator();
                     while(iter.hasNext()) {
-                        if(iter.next().isOverLegalLimit)
+                        Contaminant temp = iter.next();
+                        if(temp.isOverLegalLimit)
                             iter.remove();
                     }
 
@@ -171,7 +173,7 @@ public class AnimatedViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if(OverHealthToggle.isChecked()) {
-                    for(Contaminant c : contaminants_shown)
+                    for(Contaminant c : contaminants)
                         if(c.isOverHealthLimit)
                             contaminants_shown.add(c);
 
@@ -182,7 +184,8 @@ public class AnimatedViewActivity extends Activity {
                 else {
                     Iterator<Contaminant> iter = contaminants_shown.iterator();
                     while(iter.hasNext()) {
-                        if(iter.next().isOverHealthLimit)
+                        Contaminant temp = iter.next();
+                        if(temp.isOverHealthLimit)
                             iter.remove();
                     }
 
@@ -197,7 +200,7 @@ public class AnimatedViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if(UnharmfulToggle.isChecked()) {
-                    for(Contaminant c : contaminants_shown)
+                    for(Contaminant c : contaminants)
                         if(!c.isOverLegalLimit && !c.isOverHealthLimit)
                             contaminants_shown.add(c);
 
@@ -208,7 +211,8 @@ public class AnimatedViewActivity extends Activity {
                 else {
                     Iterator<Contaminant> iter = contaminants_shown.iterator();
                     while(iter.hasNext()) {
-                        if(!iter.next().isOverHealthLimit && !iter.next().isOverLegalLimit)
+                        Contaminant temp = iter.next();
+                        if(!temp.isOverHealthLimit && !temp.isOverLegalLimit)
                             iter.remove();
                     }
 

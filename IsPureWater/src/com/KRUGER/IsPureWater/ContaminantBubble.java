@@ -17,18 +17,36 @@ import java.util.ArrayList;
  */
 public class ContaminantBubble {
     private Contaminant contaminant; // Contaminant information
-    private float radius = 60; // Radius
+    private float radius; // Radius
     private float x, y; // Center (x,y)
     private float speedX, speedY; // Speed (x,y)
     private RectF bounds = new RectF();
     private Bitmap bubbleBitMap;
+    private Paint textPaint;
 
     // Constructor
     public ContaminantBubble(Contaminant c, Bitmap b, int num, int width, int height, int angleInDegrees) {
         contaminant = c;
         x = 0;
         y = 0;
-        bubbleBitMap = b;
+        // set radius by finding text width
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // text color - #3D3D3D
+        textPaint.setColor(Color.rgb(61, 61, 61));
+        // text size in pixels
+        textPaint.setTextSize((int) (12));
+        // text shadow
+        textPaint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+        // center alignment
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        //radius
+        float textSize = textPaint.measureText(contaminant.getName())/2;
+        if(textSize < 60)
+            radius = 60;
+        else
+            radius = textSize;
+        // scale bitMap
+        bubbleBitMap = Bitmap.createScaledBitmap(b,Math.round(2*radius), Math.round(2*radius), false);
         setBubble(num, width, height, angleInDegrees);
     }
 
@@ -133,7 +151,7 @@ public class ContaminantBubble {
         float tempY = b.getY()+b.getSpeedY();
         float tempRadius = b.getRadius();
         float distance = ((x+speedX - tempX) * (x+speedX - tempX) + (y+speedY - tempY) * (y+speedY - tempY));
-        if(radius*b.getRadius()*4+25 >= distance)
+        if((radius*2)*(b.getRadius()*2)+25 >= distance)
             return true;
         else
             return false;
@@ -207,15 +225,7 @@ public class ContaminantBubble {
         paint.setFilterBitmap(true);
         paint.setDither(true);
         canvas.drawBitmap(bubbleBitMap, null, bounds, paint);
-        // set paint for text
-        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        // text color - #3D3D3D
-        paint.setColor(Color.rgb(61, 61, 61));
-        // text size in pixels
-        paint.setTextSize((int) (12));
-        // text shadow
-        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
-        canvas.drawText(contaminant.getName(), x-textPaint.getTextSize(), y, textPaint);
+        canvas.drawText(contaminant.getName(), x, y, textPaint);
     }
 }
 
