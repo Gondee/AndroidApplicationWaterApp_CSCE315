@@ -18,7 +18,7 @@ public class ContaminantBubble {
     private Contaminant contaminant; // Contaminant information
     private float radius = 60; // Radius
     private float x, y; // Center (x,y)
-    private float speedX, speedY = 1f; // Speed (x,y)
+    private float speedX, speedY = 2f; // Speed (x,y)
     private RectF bounds = new RectF();
     private Bitmap bubbleBitMap;
 
@@ -101,8 +101,14 @@ public class ContaminantBubble {
 
     public void moveWithCollisionDetection(BoundingBox box) {
         // Get new (x,y) position
-        x += speedX;
-        y += speedY;
+        if(speedX < 3)
+            x += speedX;
+        else
+            speedX = 3;
+        if(speedY < 3)
+            y += speedY;
+        else
+            speedY = 3;
         // Detect collision and react
         if (x + radius > box.xMax) {
             speedX = -speedX;
@@ -122,11 +128,11 @@ public class ContaminantBubble {
 
     // collision with bubbles
     public boolean bubbleCollisionDetection(ContaminantBubble b) {
-        float tempX = b.getX();
-        float tempY = b.getY();
+        float tempX = b.getX()+b.getSpeedX();
+        float tempY = b.getY()+b.getSpeedY();
         float tempRadius = b.getRadius();
-        float distance = (float)(Math.sqrt((x - tempX) * (x - tempX) + (y - tempY) * (y - tempY)));
-        if(radius >= distance)
+        float distance = ((x+speedX - tempX) * (x+speedX - tempX) + (y+speedY - tempY) * (y+speedY - tempY));
+        if(radius*b.getRadius()*4 >= distance)
             return true;
         else
             return false;
@@ -139,10 +145,11 @@ public class ContaminantBubble {
 
     // Angle
     public float getMoveAngle() {
-        return (float)Math.toDegrees(Math.atan2(-speedY, speedX));
+        return (float)Math.toDegrees(Math.atan2(speedY, speedX));
     }
 
     public void bubbleCollisionHandler(ContaminantBubble b) {
+        /*
         float dx = x - b.getX();
         float dy = y - b.getY();
         float d = (float)Math.sqrt(dx*dx + dy*dy);
@@ -178,6 +185,15 @@ public class ContaminantBubble {
         speedY = vy1;
         b.setSpeedX(vx2);
         b.setSpeedY(vy2);
+        */
+
+        speedX = b.getSpeed()*(float)Math.cos(Math.toRadians(b.getMoveAngle()));
+        speedY = b.getSpeed()*(float)Math.sin(Math.toRadians(b.getMoveAngle()));
+        b.setSpeedX((float)(getSpeed()*Math.cos(Math.toRadians(getMoveAngle()))));
+        b.setSpeedY((float)(getSpeed()*Math.sin(Math.toRadians(getMoveAngle()))));
+
+
+
     }
     public void draw(Canvas canvas) {
         bounds.set(x-radius, y-radius, x+radius, y+radius);

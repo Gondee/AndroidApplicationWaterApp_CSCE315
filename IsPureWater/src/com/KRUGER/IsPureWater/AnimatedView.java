@@ -121,14 +121,17 @@ public class AnimatedView extends View {
 
         if(!bubbles.isEmpty()) {
             for(int i = 0; i < bubbles.size(); i++) {
-                bubbles.get(i).draw(canvas);
                 int temp = i;
-                for(int j = temp; j < bubbles.size(); j++) {
-                    if(bubbles.get(i).bubbleCollisionDetection(bubbles.get(j)))
+                for(int j = i+1; j < bubbles.size(); j++) {
+                    if(bubbles.get(i).bubbleCollisionDetection(bubbles.get(j))) {
                         bubbles.get(i).bubbleCollisionHandler(bubbles.get(j));
+                    }
                 }
                 // Update position of the bubble
-                bubbles.get(i).moveWithCollisionDetection(box);
+            }
+            for(ContaminantBubble b: bubbles) {
+                b.moveWithCollisionDetection(box);
+                b.draw(canvas);
             }
         }
 
