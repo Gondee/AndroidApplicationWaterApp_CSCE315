@@ -54,8 +54,8 @@ public class AnimatedViewActivity extends Activity {
         ParseData forBubbles = null;
         contaminants = new ArrayList<Contaminant>();
         try {
-            forBubbles = new ParseData();
-            contaminants = forBubbles.get_contaminants(county, system, getApplicationContext());
+            forBubbles = new ParseData(getApplicationContext());
+            contaminants = forBubbles.get_contaminants(county, system);
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {

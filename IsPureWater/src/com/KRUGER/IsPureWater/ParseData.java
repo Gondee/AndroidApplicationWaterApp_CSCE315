@@ -109,7 +109,7 @@ public class ParseData extends Object {
         return returnList;
     }
 
-    public ArrayList<Contaminant> get_contaminants(String county, String w_system, Context t) throws XmlPullParserException, IOException {
+    public ArrayList<Contaminant> get_contaminants(String county, String w_system) throws XmlPullParserException, IOException {
 
 
         InputStream is = new FileInputStream(file);

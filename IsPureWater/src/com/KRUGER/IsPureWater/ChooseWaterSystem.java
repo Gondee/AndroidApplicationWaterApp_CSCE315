@@ -45,8 +45,8 @@ public class ChooseWaterSystem extends Activity  {
         final ListView system_list = (ListView) this.findViewById(R.id.listView);
         ParseData forCounty = null;
         try {
-            forCounty = new ParseData();
-            ArrayList<String> systems = forCounty.get_systems(county, getApplicationContext());
+            forCounty = new ParseData(getApplicationContext());
+            ArrayList<String> systems = forCounty.get_systems(county);
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     simple_dropdown_item_1line, systems);
