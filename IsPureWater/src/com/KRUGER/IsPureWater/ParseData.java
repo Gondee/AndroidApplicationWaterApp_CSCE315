@@ -3,6 +3,7 @@ package com.KRUGER.IsPureWater;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
+import android.os.Environment;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -10,6 +11,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.app.Activity;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,27 +21,31 @@ import java.io.PrintWriter;
 import java.lang.String;import java.util.List;
 import java.util.ArrayList;
 
+import static android.os.Environment.getExternalStorageDirectory;
+
 /**
  * Created by Joshua on 11/22/13.
  */
-public class ParseData {
+public class ParseData extends Object {
 
     private XmlPullParserFactory factory;
     XmlPullParser xpp;
     ArrayList<String> returnList = new ArrayList<String>();
     ArrayList<Contaminant> contaminantList = new ArrayList<Contaminant>();
+    File file;
 
-    
+
     public ParseData() throws XmlPullParserException {
         factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         xpp = factory.newPullParser();
+        file = new File(getExternalStorageDirectory(), "NYTimes_TexasWater.xml");
     }
+
 
     public ArrayList<String> get_systems(String county, Context t) throws XmlPullParserException, IOException
     {
-        AssetManager am = t.getAssets();
-        InputStream is = am.open("NYTimes_TexasWater.xml");
+        InputStream is = new FileInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         xpp.setInput(reader);
 
@@ -80,8 +87,7 @@ public class ParseData {
     public ArrayList<Contaminant> get_contaminants(String county, String w_system, Context t) throws XmlPullParserException, IOException {
 
 
-        AssetManager am = t.getAssets();
-        InputStream is = am.open("NYTimes_TexasWater.xml");
+        InputStream is = new FileInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         xpp.setInput(reader);
 
