@@ -45,7 +45,7 @@ public class ParseData extends Object {
 
         AssetManager am = t.getAssets();
 
-            InputStream in = am.open("NYTimes_TexasWater.xml");;
+            InputStream in = am.open("NYTimes_TexasWater.xml");
             OutputStream out = null;
             File outFile = new File(getExternalStorageDirectory(), "NYTimes_TexasWater.xml");
             out = new FileOutputStream(outFile);
