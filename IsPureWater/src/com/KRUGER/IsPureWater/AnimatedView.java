@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -20,6 +21,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 
@@ -77,15 +79,14 @@ public class AnimatedView extends View {
         try {
             open = manager.open(color+"Bubble.png");
             Bitmap originalBitmap = BitmapFactory.decodeStream(open);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, 120, 120, false);
-            return scaledBitmap;
+            return originalBitmap;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void setContaminantBubbles(ArrayList<Contaminant> cl) {
+    public void setContaminantBubbles(Collection<Contaminant> cl) {
         bubbles.clear();
         String color;
         int i = 0;
@@ -110,6 +111,7 @@ public class AnimatedView extends View {
         width = xNew;
         height = yNew;
         Random rand = new Random();
+        Log.d("WIDTH HEIGHT", width+" "+height);
         box.set(0, 0, width, height);
     }
 
@@ -141,6 +143,31 @@ public class AnimatedView extends View {
         } catch (InterruptedException e) { }
 
         invalidate();  // Force a re-draw
+    }
+
+    // Touch-input handler
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float currentX = event.getX();
+        float currentY = event.getY();
+        float deltaX, deltaY;
+        for(ContaminantBubble b : bubbles) {
+            if(b.bubbleCollisionDetection(currentX, currentY)) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        setSoundEffectsEnabled(true);
+                        playSoundEffect(0);
+                        // Modify rotational angles according to movement
+                        deltaX = currentX - b.getX();
+                        deltaY = currentY - b.getY();
+                        float speed = (float)Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                        float angle = (float)Math.toDegrees(Math.atan2(deltaY, deltaX));
+                        b.setSpeedX(speed*(float)Math.cos(Math.toRadians(angle)));
+                        b.setSpeedY(speed*(float)Math.sin(Math.toRadians(angle)));
+                }
+            }
+        }
+        return true;
     }
 }
 
