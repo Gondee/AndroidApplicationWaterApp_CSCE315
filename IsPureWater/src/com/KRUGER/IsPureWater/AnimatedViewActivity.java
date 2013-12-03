@@ -1,6 +1,8 @@
 package com.KRUGER.IsPureWater;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -65,6 +67,21 @@ public class AnimatedViewActivity extends Activity {
         bubbles.setContaminantBubbles(contaminants);
         contaminants_shown = new LinkedList<Contaminant>(contaminants);
         container.addView(bubbles, 0);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("CONTAMINANTS");
+        alertDialog.setMessage("Green bubbles are unharmful\n"+
+                               "Yellow bubbles are over the saftey limit \n"+
+                               "Red bubbles are over the legal limit \n"+
+                               "Bubbles respond to touch!");
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+// Set the Icon for the Dialog
+        alertDialog.show();
+
 
         final Button OverLegalButton= (Button) this.findViewById(R.id.buttonOverLegal);
         final Button OverSafteyButton = (Button) this.findViewById(R.id.buttonOverSaftey);

@@ -120,14 +120,18 @@ public class ContaminantBubble {
 
     public void moveWithCollisionDetection(BoundingBox box) {
         // Get new (x,y) position
-        if(speedX < 4)
+        if(speedX <= 4)
             x += speedX;
-        else
+        else {
+            x += 4;
             speedX = 4;
-        if(speedY < 4)
+        }
+        if(speedY <= 4)
             y += speedY;
-        else
+        else {
+            y += 4;
             speedY = 4;
+        }
         // Detect collision and react
         if (x + radius > box.xMax) {
             speedX = -speedX;
@@ -157,6 +161,14 @@ public class ContaminantBubble {
             return false;
     }
 
+    public boolean bubbleCollisionDetection(float touchX, float touchY) {
+        float distance = ((x - touchX) * (x - touchX) + (y - touchY) * (y - touchY));
+        if((radius*radius) >= distance)
+            return true;
+        else
+            return false;
+    }
+
     // Magnitude of speed
     public float getSpeed() {
         return (float)Math.sqrt(speedX * speedX + speedY * speedY);
@@ -168,44 +180,6 @@ public class ContaminantBubble {
     }
 
     public void bubbleCollisionHandler(ContaminantBubble b) {
-        /*
-        float dx = x - b.getX();
-        float dy = y - b.getY();
-        float d = (float)Math.sqrt(dx*dx + dy*dy);
-        float vp1, vp2, vx1, vx2, vy1, vy2;
-        vx1 = speedX;
-        vx2 = b.getSpeedX();
-        vy1 = speedY;
-        vy2 = b.getSpeedY();
-        vp1 = vx1*dx/d + vy1*dy/d;
-        vp2 = vx2*dx/d + vy2*dy/d;
-
-        // Unit vector in direction of collision
-        float ax = dx/d;
-        float ay = dy/d;
-
-        // Projection of velocities
-        float va1 = vx1*ax +vy1*ay;
-        float vb1 = -vx1*ay + vy1*ax;
-        float va2 = vx2*ax + vy2*ay;
-        float vb2 = -vx2 + vy2*ax;
-
-        // New velocities
-        float vaP1 = va1 + (va1-va2);
-        float vaP2 = va2 + (va1-va2);
-
-        // Undo projections
-        vx1 = vaP1*ax - vb1*ay;
-        vy1 = vaP1*ay + vb1*ax;
-        vx2 = vaP2*ax - vb2*ay;
-        vy2 = vaP2*ay + vb2*ax;
-
-        speedX = vx1;
-        speedY = vy1;
-        b.setSpeedX(vx2);
-        b.setSpeedY(vy2);
-        */
-
         float angle = getMoveAngle();
         float otherAngle = b.getMoveAngle();
 

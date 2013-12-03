@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -142,6 +143,31 @@ public class AnimatedView extends View {
         } catch (InterruptedException e) { }
 
         invalidate();  // Force a re-draw
+    }
+
+    // Touch-input handler
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float currentX = event.getX();
+        float currentY = event.getY();
+        float deltaX, deltaY;
+        for(ContaminantBubble b : bubbles) {
+            if(b.bubbleCollisionDetection(currentX, currentY)) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        setSoundEffectsEnabled(true);
+                        playSoundEffect(0);
+                        // Modify rotational angles according to movement
+                        deltaX = currentX - b.getX();
+                        deltaY = currentY - b.getY();
+                        float speed = (float)Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                        float angle = (float)Math.toDegrees(Math.atan2(deltaY, deltaX));
+                        b.setSpeedX(speed*(float)Math.cos(Math.toRadians(angle)));
+                        b.setSpeedY(speed*(float)Math.sin(Math.toRadians(angle)));
+                }
+            }
+        }
+        return true;
     }
 }
 
