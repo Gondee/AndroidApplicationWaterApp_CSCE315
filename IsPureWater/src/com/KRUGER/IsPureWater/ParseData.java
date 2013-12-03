@@ -13,10 +13,13 @@ import android.app.Activity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.String;import java.util.List;
 import java.util.ArrayList;
@@ -35,15 +38,37 @@ public class ParseData extends Object {
     File file;
 
 
-    public ParseData() throws XmlPullParserException {
+    public ParseData(Context t) throws XmlPullParserException, IOException {
         factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         xpp = factory.newPullParser();
+
+        AssetManager am = t.getAssets();
+
+            InputStream in = am.open("NYTimes_TexasWater.xml");;
+            OutputStream out = null;
+            File outFile = new File(getExternalStorageDirectory(), "NYTimes_TexasWater.xml");
+            out = new FileOutputStream(outFile);
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+
+
         file = new File(getExternalStorageDirectory(), "NYTimes_TexasWater.xml");
     }
 
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
+    }
 
-    public ArrayList<String> get_systems(String county, Context t) throws XmlPullParserException, IOException
+    public ArrayList<String> get_systems(String county) throws XmlPullParserException, IOException
     {
         InputStream is = new FileInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
